@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Operation CipherMind – Motivation Behind Cybercrime</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050712;
+      --bg-alt: #0b1020;
+      --accent: #32ffc7;
+      --accent-soft: rgba(50, 255, 199, 0.1);
+      --danger: #ff4b81;
+      --text-main: #f5f7ff;
+      --text-muted: #a0a4c0;
+      --border-subtle: #20253a;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.5);
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #141b3f 0, #050712 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .shell {
+      max-width: 1100px;
+      width: 100%;
+      background: linear-gradient(135deg, #080b18, #040612);
+      border-radius: 24px;
+      border: 1px solid #252b45;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      overflow: hidden;
+    }
+
+    @media (max-width: 840px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sidebar {
+      background: radial-gradient(circle at top left, #1a2147, #050712);
+      border-right: 1px solid var(--border-subtle);
+      padding: 18px 16px 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .logo-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      border: 1px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--accent);
+      background: radial-gradient(circle at top, rgba(50,255,199,0.24), transparent);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .logo-text span:first-child {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .logo-text span:last-child {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .nav-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      margin-top: 8px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item {
+      border-radius: 12px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      padding: 7px 9px;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.15s border, 0.15s background, 0.15s color, 0.15s transform;
+    }
+
+    .nav-item span.badge {
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-item:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.02);
+      transform: translateX(2px);
+    }
+
+    .nav-item.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .nav-footer {
+      margin-top: 18px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid #262c45;
+      padding-top: 10px;
+    }
+
+    .nav-footer strong {
+      color: #e4e7ff;
+    }
+
+    .main {
+      padding: 20px 22px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .headline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .headline-text h1 {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+
+    .headline-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 420px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      background: rgba(50, 255, 199, 0.08);
+    }
+
+    .terminal-strip {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #171d39, #050712);
+      border: 1px solid #272d49;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 7px rgba(50, 255, 199, 0.6);
+    }
+
+    .content-card {
+      background: radial-gradient(circle at top left, #151a3b, #050712);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .case-title {
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+
+    .case-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .case-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    @media (min-width: 780px) {
+      .case-grid.two {
+        grid-template-columns: 1.2fr 1fr;
+      }
+      .case-grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .card {
+      padding: 8px 9px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: radial-gradient(circle at top, rgba(50, 255, 199, 0.03), transparent);
+      font-size: 13px;
+    }
+
+    .card h3 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .card p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .card ul {
+      list-style: disc;
+      padding-left: 16px;
+      margin-top: 4px;
+      color: var(--text-muted);
+    }
+
+    .pilllist {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-muted);
+    }
+
+    .note {
+      font-size: 11px;
+      color: var(--text-muted);
+      border-left: 2px solid #3b4262;
+      padding-left: 8px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .section-footer {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-badge">◎</div>
+        <div class="logo-text">
+          <span>Casefile</span>
+          <span>Operation&nbsp;CipherMind</span>
+        </div>
+      </div>
+
+      <div class="nav-label">Case files</div>
+      <ul class="nav-list" id="navList">
+        <li class="nav-item active" data-target="case-intro">
+          🛰️ Overview
+        </li>
+        <li class="nav-item" data-target="case-what">
+          💻 What is cybercrime?
+        </li>
+        <li class="nav-item" data-target="case-money">
+          💸 Financial motives
+        </li>
+        <li class="nav-item" data-target="case-individual">
+          ⚡ Thrill & arousal
+        </li>
+        <li class="nav-item" data-target="case-cultural">
+          🕶️ Cultural & hacktivism
+        </li>
+        <li class="nav-item" data-target="case-emotions">
+          💔 Emotions
+        </li>
+        <li class="nav-item" data-target="case-bio">
+          🧠 Biological factors
+        </li>
+        <li class="nav-item" data-target="case-motives">
+          🎯 Extrinsic vs intrinsic
+        </li>
+        <li class="nav-item" data-target="case-social">
+          👥 Social pressure
+        </li>
+        <li class="nav-item" data-target="case-maslow">
+          🔺 Maslow’s needs
+        </li>
+        <li class="nav-item" data-target="case-personal">
+          ✍️ My motivation
+        </li>
+        <li class="nav-item" data-target="case-sources">
+          📚 Sources & teacher notes
+        </li>
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <header class="headline">
+        <div class="headline-text">
+          <h1 id="headlineTitle">Overview</h1>
+          <p id="headlineSubtitle">
+            Navigate through the case files to investigate the psychological
+            and social motives behind cybercrime.
+          </p>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <span class="tag">Motivation project</span>
+          <div class="terminal-strip">
+            <span class="dot"></span>
+            <span>status: analysis in progress…</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- CASE: INTRO -->
+      <section id="case-intro" class="content-card">
+        <h2 class="case-title">Project brief – why study cybercrime motivation?</h2>
+        <p class="case-subtitle">
+          Cybercrime is one of the fastest-growing forms of crime in Canada. Understanding
+          <em>why</em> people become cybercriminals helps us design better prevention,
+          education, and policies.
+        </p>
+
+        <div class="case-grid two">
+          <div class="card">
+            <h3>What this investigation asks</h3>
+            <ul>
+              <li>What is cybercrime and what forms does it take?</li>
+              <li>What motivates people to commit these acts?</li>
+              <li>How do culture, emotion, biology and social factors interact?</li>
+              <li>How do theories of motivation explain cybercrime?</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>How Will Cybercrime be Addressed?</h3>
+            <p>
+              In this project, cybercrime is treated as a behaviour that can be
+              analysed through psychological motivation theories: arousal theory, drive
+              reduction theory, extrinsic vs intrinsic motivation, and Maslow’s hierarchy
+              of needs.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: WHAT IS CYBERCRIME -->
+      <section id="case-what" class="content-card hidden">
+        <h2 class="case-title">Case file 1 – Definition & types of cybercrime</h2>
+        <p class="case-subtitle">
+          Establishing what counts as cybercrime before analysing motives.
+        </p>
+
+        <div class="case-grid two">
+          <div class="card">
+            <h3>Working definition</h3>
+            <p>
+              Cybercrime refers to illegal activities carried out using computers,
+              networks or the internet. It ranges from relatively simple hacks
+              to highly organised, large-scale attacks on institutions.
+            </p>
+            <p style="margin-top:4px;">
+              In Canada, cybercrime is an emerging sector of crime and affects a
+              significant fraction of internet users each year.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Main categories</h3>
+            <ul>
+              <li>Financial fraud (phishing, online scams, ransomware demands)</li>
+              <li>Identity theft and data breaches</li>
+              <li>Hacking into systems and networks</li>
+              <li>Denial of service attacks (DDoS)</li>
+              <li>Hacktivism and politically motivated attacks</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: MONEY -->
+      <section id="case-money" class="content-card hidden">
+        <h2 class="case-title">Case file 2 – Financial motivation</h2>
+        <p class="case-subtitle">
+          Money is the clearest and most common extrinsic motive in cybercrime.
+        </p>
+
+        <div class="case-grid two">
+          <div class="card">
+            <h3>Money as primary driver</h3>
+            <p>
+              Research estimates that over half of recorded cybercrimes worldwide
+              have a financial motive. Cybercriminals see the internet as a space
+              with high potential payoff, relative anonymity, and low perceived risk.
+            </p>
+            <div class="pilllist">
+              <span class="pill">Ransomware</span>
+              <span class="pill">Phishing</span>
+              <span class="pill">Wire transfer fraud</span>
+              <span class="pill">Crypto laundering</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Common mechanisms</h3>
+            <ul>
+              <li>Hacking into systems to redirect funds to offshore accounts.</li>
+              <li>Selling stolen credit-card or identity data on the dark web.</li>
+              <li>
+                Phishing scams: impersonating banks or companies to trick
+                people into sending money or giving login details.
+              </li>
+              <li>
+                Ransomware: locking an organisation’s files and demanding
+                payment (often in cryptocurrency) to restore access.
+              </li>
+            </ul>
+            <p style="margin-top:4px;">
+              These are classic examples of <strong>extrinsic motivation</strong> – the
+              behaviour is driven by external rewards (money, material gain) rather
+              than enjoyment of the act itself.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: INDIVIDUAL / AROUSAL -->
+      <section id="case-individual" class="content-card hidden">
+        <h2 class="case-title">Case file 3 – Thrill, arousal & individual motives</h2>
+        <p class="case-subtitle">
+          Not all cybercrime is about money; for some offenders, it is about excitement,
+          challenge, or ideology.
+        </p>
+
+        <div class="case-grid two">
+          <div class="card">
+            <h3>Arousal theory</h3>
+            <p>
+              Arousal theory suggests that people seek activities that move them
+              toward an optimal level of stimulation. Hacking into a protected
+              system can create a “rush” – increased heart rate, adrenaline and
+              dopamine – similar to other risk-taking behaviours.
+            </p>
+            <ul>
+              <li>Thrill-seeking and “beating the system”.</li>
+              <li>Testing one’s intelligence and technical skills.</li>
+              <li>Repeat offending because the rush becomes reinforcing.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Non-financial motives</h3>
+            <ul>
+              <li>
+                <strong>Boredom:</strong> highly skilled individuals with limited outlets
+                may use hacking as a self-set challenge.
+              </li>
+              <li>
+                <strong>Vigilantism:</strong> attacking sites they see as corrupt or
+                unjust, to push their own ideological or political views.
+              </li>
+              <li>
+                <strong>Status:</strong> proving competence to online communities.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: CULTURAL -->
+      <section id="case-cultural" class="content-card hidden">
+        <h2 class="case-title">Case file 4 – Cultural influences & hacktivism</h2>
+        <p class="case-subtitle">
+          Online subcultures and media shape what people see as acceptable or even heroic.
+        </p>
+
+        <div class="case-grid two">
+          <div class="card">
+            <h3>Hacker culture</h3>
+            <p>
+              Certain online spaces frame hacking as clever, rebellious, or even noble.
+              Memes, movies and forums can normalise illegal behaviour and blur the line
+              between activism and crime.
+            </p>
+            <ul>
+              <li>Anonymous usernames and avatars reduce accountability.</li>
+              <li>“Elite” hackers gain respect and influence in communities.</li>
+              <li>Some platforms celebrate leaking or defacing sites.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Example: the “Anonymous” collective</h3>
+            <p>
+              Anonymous is a loose, decentralised group of self-proclaimed hacktivists.
+              They have carried out cyberattacks on governments, corporations and
+              religious organisations.
+            </p>
+            <p style="margin-top:4px;">
+              In 2008, they targeted the Church of Scientology with distributed denial
+              of service attacks, prank calls and website disruptions. The motive was
+              not financial but ideological – protesting what they saw as censorship
+              and control of information.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: EMOTIONS -->
+      <section id="case-emotions" class="content-card hidden">
+        <h2 class="case-title">Case file 5 – Emotional influences</h2>
+        <p class="case-subtitle">
+          Fear, anger, excitement and even happiness can shape why someone turns to cybercrime.
+        </p>
+
+        <div class="case-grid three">
+          <div class="card">
+            <h3>Fear</h3>
+            <p>
+              Fear of poverty, job loss or financial instability can push someone
+              toward crimes that promise quick money, especially when online
+              anonymity makes the risk feel low.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Anger</h3>
+            <p>
+              Anger at institutions, schools or governments can motivate revenge-style
+              cyberattacks, such as vandalising websites or leaking data.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Excitement & happiness</h3>
+            <p>
+              Successfully breaking into a system can feel exhilarating. The positive
+              emotion reinforces the behaviour, especially when combined with
+              dopamine release and social praise from peers.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: BIOLOGY -->
+      <section id="case-bio" class="content-card hidden">
+        <h2 class="case-title">Case file 6 – Biological factors</h2>
+        <p class="case-subtitle">
+          Hormones and brain chemistry shape how rewarding and risky cybercrime feels,
+          but there is no “cybercrime gene.”
+        </p>
+
+        <div class="case-grid two">
+          <div class="card">
+            <h3>Reward & arousal systems</h3>
+            <ul>
+              <li><strong>Dopamine:</strong> involved in reward and reinforcement when a hack succeeds.</li>
+              <li><strong>Norepinephrine & adrenaline:</strong> increase alertness and focus during high-stakes attacks.</li>
+              <li><strong>Cortisol:</strong> stress hormone that can rise when there is a risk of being caught.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>What biology does <em>not</em> explain</h3>
+            <p>
+              Unlike hunger or sex, there is no built-in biological drive to commit
+              cybercrime. Drive reduction theory, which focuses on restoring
+              homeostasis by reducing discomfort, does not fit well: cybercrime
+              usually increases arousal and tension instead of reducing it.
+            </p>
+            <p style="margin-top:4px;">
+              Biology helps explain why the activity can feel rewarding or addictive,
+              but social, cultural and cognitive factors are more important for
+              explaining <em>why</em> people choose cybercrime in the first place.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: EXTRINSIC VS INTRINSIC -->
+      <section id="case-motives" class="content-card hidden">
+        <h2 class="case-title">Case file 7 – Extrinsic vs intrinsic motivation</h2>
+        <p class="case-subtitle">
+          Many cybercrimes mix outside rewards with inner satisfaction or ideology.
+        </p>
+
+        <div class="case-grid two">
+          <div class="card">
+            <h3>Extrinsic motives</h3>
+            <ul>
+              <li>Money and material gain.</li>
+              <li>Status and reputation in hacker communities.</li>
+              <li>Power over systems, data, or institutions.</li>
+              <li>Avoidance of punishment through anonymity.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Intrinsic motives</h3>
+            <ul>
+              <li>Curiosity about how systems work.</li>
+              <li>Enjoyment of solving complex technical problems.</li>
+              <li>Thrill of risk and challenge.</li>
+              <li>Belief in a cause (political or social hacktivism).</li>
+            </ul>
+            <p style="margin-top:4px;">
+              Real cases usually involve both: an offender might enjoy the challenge
+              (intrinsic) while also wanting money or recognition (extrinsic).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: SOCIAL -->
+      <section id="case-social" class="content-card hidden">
+        <h2 class="case-title">Case file 8 – Peer, family & expectations</h2>
+        <p class="case-subtitle">
+          Motivation is shaped by the social environments people grow up and interact in.
+        </p>
+
+        <div class="case-grid two">
+          <div class="card">
+            <h3>Peers & online communities</h3>
+            <ul>
+              <li>Hacker forums and Discord servers can normalise illegal acts.</li>
+              <li>Group operations (“ops”) create a sense of belonging and pressure to participate.</li>
+              <li>Young offenders may be encouraged by older, more skilled members.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Family, school & expectations</h3>
+            <ul>
+              <li>High pressure at home can push teens to escape into online worlds.</li>
+              <li>Feeling isolated or bullied at school can make online communities more attractive.</li>
+              <li>Some families may minimise or not understand the seriousness of cyber offences.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: MASLOW -->
+      <section id="case-maslow" class="content-card hidden">
+        <h2 class="case-title">Case file 9 – Maslow’s hierarchy of needs</h2>
+        <p class="case-subtitle">
+          Cybercrime can be mapped onto several levels of Maslow’s pyramid, although in unhealthy ways.
+        </p>
+
+        <div class="case-grid three">
+          <div class="card">
+            <h3>Safety & security</h3>
+            <p>
+              For some offenders, cybercrime is a way to obtain money for basic needs
+              or to escape unstable living situations. It attempts to meet security
+              needs through illegal income.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Belonging & esteem</h3>
+            <p>
+              Hacker groups can provide a sense of belonging, identity and respect.
+              Being recognised as “skilled” meets esteem needs, even if the actions
+              are harmful.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Self-actualisation (distorted)</h3>
+            <p>
+              Hacktivists may feel they are achieving their full potential by fighting
+              for political or social causes online, even when methods are illegal.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CASE: PERSONAL -->
+      <section id="case-personal" class="content-card hidden">
+        <h2 class="case-title">Personal reflection – my own motivations</h2>
+        <p class="case-subtitle">
+          Part B: a separate example of motivation from my own life.
+        </p>
+
+        <div class="card">
+          <h3>Replace this with your paragraph</h3>
+          <p>
+            Write 1 solid paragraph about something you have accomplished or want to
+            accomplish (education, health, community involvement, etc.) and explain
+            what motivates you. Mention:
+          </p>
+          <ul>
+            <li>Intrinsic motives (interest, passion, curiosity, satisfaction).</li>
+            <li>Extrinsic motives (grades, scholarships, recognition, future career).</li>
+            <li>Any cultural, family or personal factors that influence you.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- CASE: SOURCES -->
+      <section id="case-sources" class="content-card hidden">
+        <h2 class="case-title">Sources </h2>
+
+
+        <div class="card">
+          <h3>Sources </h3>
+          <ul>
+            <li>  </li>
+            <li>  </li>
+          </ul>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const navItems = document.querySelectorAll(".nav-item");
+    const sections = document.querySelectorAll(".content-card");
+    const headlineTitle = document.getElementById("headlineTitle");
+    const headlineSubtitle = document.getElementById("headlineSubtitle");
+
+    const titles = {
+      "case-intro": ["Overview", "Navigate the case files to see how different motivation theories explain cybercrime."],
+      "case-what": ["What is cybercrime?", "Definition and main categories before we analyse motives."],
+      "case-money": ["Financial motives", "How extrinsic rewards like money and power drive many cybercrimes."],
+      "case-individual": ["Thrill & arousal", "Arousal theory and individual-level motives such as excitement and challenge."],
+      "case-cultural": ["Cultural & hacktivism", "How online cultures and ideological movements shape cybercriminal behaviour."],
+      "case-emotions": ["Emotions", "The roles of fear, anger and excitement in motivation."],
+      "case-bio": ["Biological factors", "What brain chemistry can and cannot explain about cybercrime."],
+      "case-motives": ["Extrinsic vs intrinsic", "How outside rewards and inner satisfaction interact."],
+      "case-social": ["Social pressure", "Influence of peers, family and expectations."],
+      "case-maslow": ["Maslow’s needs", "Mapping cybercrime to security, belonging, esteem and self-actualisation."],
+      "case-personal": ["My motivation", "A separate example from my own life (Part B)."],
+      "case-sources": ["Sources & teacher notes", "Articles used and how sections map to the rubric."]
+    };
+
+    navItems.forEach(item => {
+      item.addEventListener("click", () => {
+        const target = item.dataset.target;
+
+        navItems.forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+
+        sections.forEach(sec => {
+          if (sec.id === target) {
+            sec.classList.remove("hidden");
+          } else {
+            sec.classList.add("hidden");
+          }
+        });
+
+        if (titles[target]) {
+          headlineTitle.textContent = titles[target][0];
+          headlineSubtitle.textContent = titles[target][1];
+        }
+      });
+    });
+  </script>
+</body>
+</html>
