@@ -25,26 +25,39 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: radial-gradient(circle at top, #141b3f 0, #050712 55%);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #1b234f 0, #050712 55%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       padding: 24px;
+      line-height: 1.65;
+      letter-spacing: 0.01em;
     }
 
     .shell {
       max-width: 1100px;
       width: 100%;
-      background: linear-gradient(135deg, #080b18, #040612);
+      background: linear-gradient(140deg, #0a0d1e, #040612 35%, #050712);
       border-radius: 24px;
       border: 1px solid #252b45;
       box-shadow: var(--shadow-soft);
       display: grid;
       grid-template-columns: 260px minmax(0, 1fr);
       overflow: hidden;
+      position: relative;
+    }
+
+    .shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 70% 30%, rgba(50, 255, 199, 0.12), transparent 40%),
+        radial-gradient(circle at 10% 70%, rgba(255, 75, 129, 0.08), transparent 35%);
+      z-index: 0;
     }
 
     @media (max-width: 840px) {
@@ -57,6 +70,8 @@
       background: radial-gradient(circle at top left, #1a2147, #050712);
       border-right: 1px solid var(--border-subtle);
       padding: 18px 16px 24px;
+      position: relative;
+      z-index: 1;
     }
 
     .logo {
@@ -64,6 +79,7 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 18px;
+      filter: drop-shadow(0 10px 24px rgba(50, 255, 199, 0.16));
     }
 
     .logo-badge {
@@ -77,6 +93,7 @@
       font-size: 18px;
       color: var(--accent);
       background: radial-gradient(circle at top, rgba(50,255,199,0.24), transparent);
+      box-shadow: inset 0 0 0 1px rgba(50, 255, 199, 0.22);
     }
 
     .logo-text {
@@ -104,6 +121,7 @@
       color: var(--text-muted);
       margin-bottom: 8px;
       margin-top: 8px;
+      opacity: 0.85;
     }
 
     .nav-list {
@@ -164,6 +182,8 @@
       display: flex;
       flex-direction: column;
       gap: 18px;
+      position: relative;
+      z-index: 1;
     }
 
     .headline {
@@ -172,6 +192,11 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
+      padding: 14px 16px;
+      border: 1px solid #20263e;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(50, 255, 199, 0.08), transparent);
+      backdrop-filter: blur(6px);
     }
 
     .headline-text h1 {
@@ -271,28 +296,40 @@
     }
 
     .card {
-      padding: 8px 9px;
-      border-radius: 12px;
+      padding: 16px 18px;
+      border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      background: radial-gradient(circle at top, rgba(50, 255, 199, 0.03), transparent);
+      background: radial-gradient(circle at top right, rgba(50, 255, 199, 0.07),
+          rgba(11, 16, 32, 0.96)),
+        linear-gradient(135deg, #0a0f2c, #050713);
       font-size: 13px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 12px 28px rgba(0, 0, 0, 0.35);
     }
 
     .card h3 {
-      font-size: 13px;
-      margin-bottom: 4px;
+      font-size: 14px;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
     }
 
     .card p {
-      font-size: 12px;
-      color: var(--text-muted);
+      font-size: 13px;
+      color: #dfe2f2;
+      line-height: 1.8;
+      max-width: 80ch;
+    }
+
+    .card p + p {
+      margin-top: 10px;
     }
 
     .card ul {
       list-style: disc;
       padding-left: 16px;
-      margin-top: 4px;
+      margin-top: 6px;
       color: var(--text-muted);
+      display: grid;
+      gap: 6px;
     }
 
     .pilllist {
@@ -303,18 +340,43 @@
     }
 
     .pill {
-      font-size: 11px;
-      padding: 2px 7px;
+      font-size: 12px;
+      padding: 7px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: var(--text-muted);
+      border: 1px solid rgba(50, 255, 199, 0.24);
+      color: #dffaf0;
+      background: rgba(50, 255, 199, 0.08);
     }
 
     .note {
+      font-size: 12px;
+      color: #cdebe0;
+      border: 1px dashed rgba(50, 255, 199, 0.34);
+      background: rgba(50, 255, 199, 0.06);
+      padding: 10px 12px;
+      border-radius: 12px;
+      line-height: 1.7;
+    }
+
+    .text-divider {
+      display: inline-block;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+      margin: 14px 0 10px;
+    }
+
+    .balanced-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .muted-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
       font-size: 11px;
       color: var(--text-muted);
-      border-left: 2px solid #3b4262;
-      padding-left: 8px;
     }
 
     .hidden {
@@ -774,30 +836,36 @@
         <div class="card">
           <p>
             Like many others, I am influenced by both intrinisc and extrinisic motivation. However, I like to believe that I am powered by intrinsic motivation more.
-
-            Extrinsic Motivation:
-            When I was younger, extrinsic motivation was the most powerful: grades, praise and awards influenced me to go to school,
-            and learn. Today, material motivation does not drive me, but instead the main factors such as AP scores, university admissions and future career plans.
-            One thing I realized is that in the end, I might be too focused on the end point but not the task at hand and the process. I recall my earlier experiences as a child
-            my family members seem to always use extrinsic motivation to motivate us. To praise us for our hard work and effort, they would give us monetary rewards even though back then,
-            we would be too young to understand the importance of money. 
-
-            Intrinsic Motivation:
-            In my opinion, my intrinsic motivation is very diverse and comes from many factors. I believe the most influential form of intrinsic motivation for me is in the form of stories 
-            and experiences of others. What I do inspired by stoires of others. One of my favorite inspirational stories come from John D Rockerfeller- reading his 
-            personal writings on what it means to live life, grow, compete and expand provides me with intrinsic motivation to be the best i can be, especially since 
-            he started off as a poor child working his way to the top. Another story that has motivated me is one that I have always heard. The stories of "The Long March"
-            influences me to go forward in life. The struggles of revolutionaries of their ideals has been passed upon to me which influences how i think and act. 
-
-            In Physics class, I am inspired by the desire to lengthen my knowledge. Originally, I didint expect to be studying so much physics but what i learned and 
-            how it explained so many things powers my intrinsic motivation for physics. 
-
-            
           </p>
-          <ul>
-            <li>Intrinsic motives (interest, passion, curiosity, satisfaction).</li>
-            <li>Extrinsic motives (grades, status, recognition, future career).</li>
-          </ul>
+
+          <div class="balanced-grid">
+            <div>
+              <h4>Extrinsic Motivation</h4>
+              <p>
+                When I was younger, extrinsic motivation was the most powerful: grades, praise and awards influenced me to go to school, and learn. Today, material motivation does not drive me, but instead the main factors such as AP scores, university admissions and future career plans.
+              </p>
+              <p>
+                One thing I realized is that in the end, I might be too focused on the end point but not the task at hand and the process. I recall my earlier experiences as a child my family members seem to always use extrinsic motivation to motivate us. To praise us for our hard work and effort, they would give us monetary rewards even though back then, we would be too young to understand the importance of money.
+              </p>
+            </div>
+            <div>
+              <h4>Intrinsic Motivation</h4>
+              <p>
+                In my opinion, my intrinsic motivation is very diverse and comes from many factors. I believe the most influential form of intrinsic motivation for me is in the form of stories and experiences of others. What I do inspired by stoires of others. One of my favorite inspirational stories come from John D Rockerfeller- reading his personal writings on what it means to live life, grow, compete and expand provides me with intrinsic motivation to be the best i can be, especially since he started off as a poor child working his way to the top.
+              </p>
+              <p>
+                Another story that has motivated me is one that I have always heard. The stories of "The Long March" influences me to go forward in life. The struggles of revolutionaries of their ideals has been passed upon to me which influences how i think and act.
+              </p>
+              <p>
+                In Physics class, I am inspired by the desire to lengthen my knowledge. Originally, I didint expect to be studying so much physics but what i learned and how it explained so many things powers my intrinsic motivation for physics.
+              </p>
+            </div>
+          </div>
+
+          <div class="pilllist">
+            <span class="pill">Intrinsic motives (interest, passion, curiosity, satisfaction).</span>
+            <span class="pill">Extrinsic motives (grades, status, recognition, future career).</span>
+          </div>
         </div>
       </section>
 
